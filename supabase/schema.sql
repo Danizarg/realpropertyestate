@@ -1,0 +1,81 @@
+-- Properties table
+create table properties (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  name text not null,
+  slug text unique not null,
+  short_description text not null,
+  long_description text,
+  price numeric,
+  price_label text not null,
+  location text not null,
+  address text,
+  bedrooms int,
+  bathrooms numeric,
+  internal_area text,
+  plot_size text,
+  outdoor_space text,
+  property_type text,
+  listing_type text,
+  status text default 'Available',
+  pets text,
+  instagram_url text,
+  tiktok_url text,
+  features text[],
+  published boolean default false,
+  featured boolean default false
+);
+
+-- Property images
+create table property_images (
+  id uuid primary key default gen_random_uuid(),
+  property_id uuid references properties(id) on delete cascade,
+  url text not null,
+  storage_path text not null,
+  alt text,
+  sort_order int default 0,
+  is_cover boolean default false,
+  created_at timestamptz default now()
+);
+
+-- Contact submissions
+create table contact_submissions (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  name text not null,
+  email text not null,
+  phone text,
+  interest text,
+  property_id uuid references properties(id) on delete set null,
+  message text not null
+);
+
+-- RLS policies
+alter table properties enable row level security;
+alter table property_images enable row level security;
+alter table contact_submissions enable row level security;
+
+-- Public can read published properties
+create policy "Public read published properties" on properties
+  for select using (published = true);
+
+-- Public can read images of published properties
+create policy "Public read property images" on property_images
+  for select using (
+    exists (select 1 from properties where id = property_id and published = true)
+  );
+
+-- Public can insert contact submissions
+create policy "Public insert contact" on contact_submissions
+  for insert with check (true);
+
+-- Owner full access (set OWNER_EMAIL in your environment)
+create policy "Owner full access properties" on properties
+  for all using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
+
+create policy "Owner full access images" on property_images
+  for all using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
+
+create policy "Owner read contacts" on contact_submissions
+  for select using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
