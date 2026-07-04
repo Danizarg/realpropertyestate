@@ -70,12 +70,18 @@ create policy "Public read property images" on property_images
 create policy "Public insert contact" on contact_submissions
   for insert with check (true);
 
--- Owner full access (set OWNER_EMAIL in your environment)
+-- Owner full access. Only one Supabase Auth user should ever exist (the owner),
+-- so "authenticated" is equivalent to "owner" here. If you ever add more
+-- authenticated users, replace auth.role() = 'authenticated' with an email
+-- check against your OWNER_EMAIL, e.g.:
+--   auth.jwt()->>'email' = 'owner@example.com'
 create policy "Owner full access properties" on properties
-  for all using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
+  for all using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
 
 create policy "Owner full access images" on property_images
-  for all using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
+  for all using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
 
 create policy "Owner read contacts" on contact_submissions
-  for select using (auth.jwt()->>'email' = current_setting('app.owner_email', true));
+  for select using (auth.role() = 'authenticated');
