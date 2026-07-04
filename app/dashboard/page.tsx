@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import OwnerGuard from "@/components/dashboard/OwnerGuard";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import PublishToggle from "@/components/dashboard/PublishToggle";
 import type { Metadata } from "next";
 import type { Property } from "@/lib/types";
 
@@ -120,42 +121,16 @@ export default async function DashboardPage() {
 
                   {/* Toggles */}
                   <div className="flex items-center gap-6">
-                    <form>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          defaultChecked={property.published}
-                          onChange={async (e) => {
-                            await toggleField(property.id, "published", e.target.checked);
-                          }}
-                          className="w-4 h-4 accent-black"
-                        />
-                        <span
-                          className="text-[12px]"
-                          style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
-                        >
-                          Published
-                        </span>
-                      </label>
-                    </form>
-                    <form>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          defaultChecked={property.featured}
-                          onChange={async (e) => {
-                            await toggleField(property.id, "featured", e.target.checked);
-                          }}
-                          className="w-4 h-4 accent-black"
-                        />
-                        <span
-                          className="text-[12px]"
-                          style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
-                        >
-                          Featured
-                        </span>
-                      </label>
-                    </form>
+                    <PublishToggle
+                      defaultChecked={property.published}
+                      label="Published"
+                      action={toggleField.bind(null, property.id, "published")}
+                    />
+                    <PublishToggle
+                      defaultChecked={property.featured}
+                      label="Featured"
+                      action={toggleField.bind(null, property.id, "featured")}
+                    />
                   </div>
 
                   {/* Actions */}
