@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import { uploadPropertyImage } from "@/lib/images";
 import type { PropertyImage } from "@/lib/types";
 
 interface ImageUploaderProps {
@@ -21,6 +22,10 @@ export default function ImageUploader({
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setImages(existingImages);
+  }, [existingImages]);
+
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     setUploading(true);
@@ -30,50 +35,13 @@ export default function ImageUploader({
     const newImages: PropertyImage[] = [];
 
     for (const file of Array.from(files)) {
-      if (file.size > 10 * 1024 * 1024) {
-        setError(`${file.name} exceeds 10MB limit.`);
-        continue;
+      try {
+        const sortOrder = images.length + newImages.length;
+        const imgRecord = await uploadPropertyImage(supabase, propertyId, file, sortOrder);
+        newImages.push(imgRecord);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Upload failed.");
       }
-
-      const ext = file.name.split(".").pop();
-      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const storagePath = `properties/${propertyId}/${filename}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("property-images")
-        .upload(storagePath, file, { upsert: false });
-
-      if (uploadError) {
-        setError(`Upload failed: ${uploadError.message}`);
-        continue;
-      }
-
-      const { data: urlData } = supabase.storage
-        .from("property-images")
-        .getPublicUrl(storagePath);
-
-      const sortOrder = images.length + newImages.length;
-      const isCover = sortOrder === 0;
-
-      const { data: imgRecord, error: dbError } = await supabase
-        .from("property_images")
-        .insert({
-          property_id: propertyId,
-          url: urlData.publicUrl,
-          storage_path: storagePath,
-          alt: file.name.split(".")[0],
-          sort_order: sortOrder,
-          is_cover: isCover,
-        })
-        .select()
-        .single();
-
-      if (dbError) {
-        setError(`DB error: ${dbError.message}`);
-        continue;
-      }
-
-      newImages.push(imgRecord as PropertyImage);
     }
 
     const updated = [...images, ...newImages];

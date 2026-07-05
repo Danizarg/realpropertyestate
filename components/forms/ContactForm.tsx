@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -12,6 +11,7 @@ const schema = z.object({
   phone: z.string().optional(),
   interest: z.string().optional(),
   message: z.string().min(10, "Please write a brief message"),
+  website: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -56,25 +56,18 @@ export default function ContactForm({ propertyId, propertyName, defaultInterest 
   async function onSubmit(data: FormData) {
     setServerError("");
     try {
-      // Try Supabase first
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-        const supabase = createClient();
-        const { error } = await supabase.from("contact_submissions").insert({
-          name: data.name,
-          email: data.email,
-          phone: data.phone || null,
-          interest: data.interest || null,
-          property_id: propertyId || null,
-          message: data.message,
-        });
-        if (error) throw error;
-      } else {
-        // Fallback: log only
-        console.log("Contact submission (no Supabase):", data);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, propertyId, propertyName }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Something went wrong.");
       }
       setSubmitted(true);
     } catch (err) {
-      setServerError("Something went wrong. Please try again.");
+      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       console.error(err);
     }
   }
@@ -97,6 +90,15 @@ export default function ContactForm({ propertyId, propertyName, defaultInterest 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      {/* Honeypot: hidden from real users, bots tend to fill every field */}
+      <input
+        type="text"
+        {...register("website")}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+      />
       {propertyName && (
         <p
           className="text-[13px] pb-4"

@@ -58,6 +58,7 @@ export default async function EditPropertyPage({ params }: PageProps) {
         <PropertyForm
           mode="edit"
           propertyId={property.id}
+          existingImages={property.property_images ?? []}
           defaultValues={{
             name: property.name,
             slug: property.slug,

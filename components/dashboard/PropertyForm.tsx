@@ -7,13 +7,16 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils";
+import { uploadPropertyImage } from "@/lib/images";
 import ImageUploader from "./ImageUploader";
+import StagedImagePicker from "./StagedImagePicker";
 import {
   PROPERTY_TYPES,
   LISTING_TYPES,
   STATUS_OPTIONS,
   PETS_OPTIONS,
   FEATURES_OPTIONS,
+  type PropertyImage,
 } from "@/lib/types";
 
 const schema = z.object({
@@ -47,6 +50,7 @@ interface PropertyFormProps {
   mode: "new" | "edit";
   propertyId?: string;
   defaultValues?: Partial<FormData>;
+  existingImages?: PropertyImage[];
 }
 
 const inputStyle: React.CSSProperties = {
@@ -78,10 +82,11 @@ function Field({ label, error, children }: { label: string; error?: string; chil
   );
 }
 
-export default function PropertyForm({ mode, propertyId, defaultValues }: PropertyFormProps) {
+export default function PropertyForm({ mode, propertyId, defaultValues, existingImages }: PropertyFormProps) {
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [savedId, setSavedId] = useState(propertyId ?? "");
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
 
   const {
     register,
@@ -125,6 +130,16 @@ export default function PropertyForm({ mode, propertyId, defaultValues }: Proper
 
         if (error) throw error;
         setSavedId(newProp.id);
+
+        for (let i = 0; i < pendingFiles.length; i++) {
+          try {
+            await uploadPropertyImage(supabase, newProp.id, pendingFiles[i], i);
+          } catch (imgErr) {
+            const msg = imgErr instanceof Error ? imgErr.message : "Image upload failed.";
+            setServerError((prev) => (prev ? `${prev} ${msg}` : msg));
+          }
+        }
+
         router.push(`/dashboard/properties/${newProp.id}/edit`);
       } else {
         const { error } = await supabase
@@ -299,22 +314,19 @@ export default function PropertyForm({ mode, propertyId, defaultValues }: Proper
       </section>
 
       {/* Images */}
-      {(mode === "edit" || savedId) && (
-        <section>
-          <h2
-            className="font-display text-2xl mb-6"
-            style={{ fontFamily: "Cormorant Garamond, Georgia, serif", color: "#111111", borderBottom: "1px solid #E6E3DE", paddingBottom: "16px" }}
-          >
-            Images
-          </h2>
-          <ImageUploader propertyId={savedId || propertyId!} />
-        </section>
-      )}
-      {mode === "new" && !savedId && (
-        <p className="text-[13px]" style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}>
-          Save the property first to upload images.
-        </p>
-      )}
+      <section>
+        <h2
+          className="font-display text-2xl mb-6"
+          style={{ fontFamily: "Cormorant Garamond, Georgia, serif", color: "#111111", borderBottom: "1px solid #E6E3DE", paddingBottom: "16px" }}
+        >
+          Images
+        </h2>
+        {mode === "edit" ? (
+          <ImageUploader propertyId={propertyId!} existingImages={existingImages} />
+        ) : (
+          <StagedImagePicker files={pendingFiles} onChange={setPendingFiles} />
+        )}
+      </section>
 
       {/* Publishing */}
       <section>
