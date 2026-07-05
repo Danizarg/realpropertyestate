@@ -95,9 +95,9 @@ export default function AboutPage() {
               style={{ borderTop: "1px solid #E6E3DE" }}
             />
 
-            {/* Middle wide text (paragraphs 4–6) */}
+            {/* Remaining text (paragraphs 4–8 + tagline), paired with the team image */}
             <div
-              className="space-y-6 text-[15px] leading-[1.8] max-w-2xl md:[grid-column:1/10] md:[grid-row:5] mt-10 md:mt-16"
+              className="space-y-6 text-[15px] leading-[1.8] max-w-xl md:[grid-column:1/8] md:[grid-row:5] mt-10 md:mt-16"
               style={bodyStyle}
             >
               <p>
@@ -109,13 +109,6 @@ export default function AboutPage() {
               <p>
                 What truly distinguishes us is the strength of our multidisciplinary team. Alongside our real estate specialists, we work with highly qualified architects, engineers, developers, builders, lawyers, and notaries, allowing us to provide comprehensive support at every stage of the process—from selecting the perfect property to legal advice, architectural design, construction, renovation, and investment planning.
               </p>
-            </div>
-
-            {/* Closing text (paragraphs 7–8 + tagline) */}
-            <div
-              className="space-y-6 text-[15px] leading-[1.8] max-w-xl md:[grid-column:1/8] md:[grid-row:6] mt-10"
-              style={bodyStyle}
-            >
               <p>
                 Whether you are looking for a permanent residence, a holiday home, a commercial asset, a development opportunity, or a profitable investment, we are committed to understanding your vision and delivering a tailor-made solution with professionalism, transparency, and absolute dedication.
               </p>
@@ -130,8 +123,8 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Team image — lower-right on desktop */}
-            <div className="md:[grid-column:8/13] md:[grid-row:6] md:self-start mt-10 md:mt-0">
+            {/* Team image — lower-right on desktop, level with the top of the remaining text */}
+            <div className="md:[grid-column:8/13] md:[grid-row:5] md:self-start mt-10 md:mt-16">
               <div
                 className="relative overflow-hidden"
                 style={{ aspectRatio: "4/5" }}
