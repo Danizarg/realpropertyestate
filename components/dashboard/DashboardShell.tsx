@@ -63,6 +63,16 @@ export default function DashboardShell({ children }: DashboardShellProps) {
             >
               Homepage Cover
             </Link>
+            <Link
+              href="/dashboard/import"
+              className="text-[13px] transition-colors"
+              style={{
+                fontFamily: "Inter, system-ui, sans-serif",
+                color: pathname === "/dashboard/import" ? "#111111" : "#8A8781",
+              }}
+            >
+              Bulk Import
+            </Link>
             <button
               onClick={handleLogout}
               className="text-[13px] transition-colors hover:text-[#111111]"
