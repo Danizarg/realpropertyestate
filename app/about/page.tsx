@@ -131,7 +131,7 @@ export default function AboutPage() {
             </div>
 
             {/* Team image — lower-right on desktop */}
-            <div className="md:[grid-column:8/13] md:[grid-row:6] md:self-end mt-10 md:mt-0">
+            <div className="md:[grid-column:8/13] md:[grid-row:6] md:self-start mt-10 md:mt-0">
               <div
                 className="relative overflow-hidden"
                 style={{ aspectRatio: "4/5" }}
