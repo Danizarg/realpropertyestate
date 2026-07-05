@@ -51,10 +51,19 @@ create table contact_submissions (
   message text not null
 );
 
+-- Site settings (key/value store for owner-editable site config, e.g. the
+-- homepage hero cover image/video)
+create table if not exists site_settings (
+  key text primary key,
+  value jsonb not null,
+  updated_at timestamptz default now()
+);
+
 -- RLS policies
 alter table properties enable row level security;
 alter table property_images enable row level security;
 alter table contact_submissions enable row level security;
+alter table site_settings enable row level security;
 
 -- Public can read published properties
 create policy "Public read published properties" on properties
@@ -85,3 +94,13 @@ create policy "Owner full access images" on property_images
 
 create policy "Owner read contacts" on contact_submissions
   for select using (auth.role() = 'authenticated');
+
+-- Public can read site settings (e.g. the homepage cover) so the public
+-- homepage can render them
+create policy "Public read site settings" on site_settings
+  for select using (true);
+
+-- Only the owner can change site settings
+create policy "Owner full access site settings" on site_settings
+  for all using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');

@@ -53,6 +53,16 @@ export default function DashboardShell({ children }: DashboardShellProps) {
             >
               Properties
             </Link>
+            <Link
+              href="/dashboard/settings"
+              className="text-[13px] transition-colors"
+              style={{
+                fontFamily: "Inter, system-ui, sans-serif",
+                color: pathname === "/dashboard/settings" ? "#111111" : "#8A8781",
+              }}
+            >
+              Homepage Cover
+            </Link>
             <button
               onClick={handleLogout}
               className="text-[13px] transition-colors hover:text-[#111111]"

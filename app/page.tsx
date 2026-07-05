@@ -4,6 +4,7 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import PropertyCard from "@/components/properties/PropertyCard";
 import { SEED_PROPERTIES } from "@/lib/seed";
+import { getHomepageCoverSettings } from "@/lib/settings";
 import type { Property } from "@/lib/types";
 
 async function getFeaturedProperties(): Promise<Property[]> {
@@ -28,6 +29,7 @@ async function getFeaturedProperties(): Promise<Property[]> {
 
 export default async function HomePage() {
   const featured = await getFeaturedProperties();
+  const cover = await getHomepageCoverSettings();
 
   return (
     <>
@@ -36,16 +38,28 @@ export default async function HomePage() {
       <main className="flex-1">
         {/* Hero */}
         <section className="relative min-h-[90vh] flex items-end bg-[#111111] overflow-hidden">
-          {/* Background image */}
+          {/* Background media */}
           <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1800&q=85"
-              alt="Luxury villa in Marbella"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover opacity-60"
-            />
+            {cover.mediaType === "video" ? (
+              <video
+                src={cover.mediaUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover opacity-60"
+              />
+            ) : (
+              <Image
+                src={cover.mediaUrl}
+                alt={cover.title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover opacity-60"
+              />
+            )}
           </div>
 
           {/* Content */}
@@ -61,23 +75,21 @@ export default async function HomePage() {
                 className="font-display text-[72px] md:text-[96px] leading-[0.9] mb-8 text-white"
                 style={{ fontFamily: "Cormorant Garamond, Georgia, serif", fontWeight: 300 }}
               >
-                Essence of
-                <br />
-                <em style={{ fontStyle: "italic" }}>Marbella</em>
+                {cover.title}
               </h1>
               <p
                 className="text-[15px] leading-relaxed mb-10 max-w-lg"
                 style={{ color: "rgba(255,255,255,0.7)", fontFamily: "Inter, system-ui, sans-serif" }}
               >
-                Curated homes, villas and apartments across Marbella&apos;s most desirable addresses.
+                {cover.subtitle}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/properties"
+                  href={cover.buttonLink}
                   className="px-8 py-4 text-[13px] tracking-[0.08em] uppercase text-white transition-opacity hover:opacity-80"
                   style={{ background: "#111111", borderRadius: 4, fontFamily: "Inter, system-ui, sans-serif" }}
                 >
-                  View Properties
+                  {cover.buttonText}
                 </Link>
                 <Link
                   href="/contact"

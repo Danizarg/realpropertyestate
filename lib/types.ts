@@ -38,6 +38,16 @@ export interface PropertyImage {
   created_at: string;
 }
 
+export interface HomepageCoverSettings {
+  mediaType: "image" | "video";
+  mediaUrl: string;
+  storagePath: string | null;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
 export interface ContactSubmission {
   id: string;
   created_at: string;
