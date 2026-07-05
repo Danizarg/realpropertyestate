@@ -1,6 +1,7 @@
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import ContactForm from "@/components/forms/ContactForm";
+import { WHATSAPP_DISPLAY_PHONE, WHATSAPP_GENERAL_URL } from "@/lib/whatsapp";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -73,13 +74,13 @@ export default function ContactPage() {
                     WhatsApp
                   </p>
                   <a
-                    href="https://wa.me/34600000000"
+                    href={WHATSAPP_GENERAL_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[14px] transition-colors hover:text-[#111111]"
                     style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
                   >
-                    +34 600 000 000
+                    {WHATSAPP_DISPLAY_PHONE}
                   </a>
                 </div>
 

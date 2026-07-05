@@ -7,6 +7,7 @@ import PropertyDetailsGrid from "@/components/properties/PropertyDetailsGrid";
 import SocialVideoLinks from "@/components/properties/SocialVideoLinks";
 import PropertyCard from "@/components/properties/PropertyCard";
 import ContactForm from "@/components/forms/ContactForm";
+import { buildPropertyWhatsAppUrl } from "@/lib/whatsapp";
 import { SEED_PROPERTIES } from "@/lib/seed";
 import type { Property } from "@/lib/types";
 
@@ -135,14 +136,18 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               {/* CTA buttons */}
               <div className="flex flex-wrap gap-3 mb-12">
                 <a
-                  href="#enquiry"
+                  href={buildPropertyWhatsAppUrl(property.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-6 py-3 text-[13px] tracking-[0.06em] uppercase text-white transition-opacity hover:opacity-80"
                   style={{ background: "#111111", borderRadius: 4, fontFamily: "Inter, system-ui, sans-serif" }}
                 >
                   Request Private Viewing
                 </a>
                 <a
-                  href="#enquiry"
+                  href={buildPropertyWhatsAppUrl(property.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-6 py-3 text-[13px] tracking-[0.06em] uppercase transition-colors hover:bg-[#F5F4F1]"
                   style={{ border: "1px solid #E6E3DE", borderRadius: 4, fontFamily: "Inter, system-ui, sans-serif", color: "#2D2C2A" }}
                 >

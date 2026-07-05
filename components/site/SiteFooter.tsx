@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WHATSAPP_DISPLAY_PHONE, WHATSAPP_GENERAL_URL } from "@/lib/whatsapp";
 
 export default function SiteFooter() {
   return (
@@ -17,13 +18,22 @@ export default function SiteFooter() {
               Real Property Estate
             </p>
             <p
-              className="text-[13px] leading-relaxed"
+              className="text-[13px] leading-relaxed mb-3"
               style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
             >
               Marbella, Spain
               <br />
               Costa del Sol
             </p>
+            <a
+              href={WHATSAPP_GENERAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[13px] transition-colors hover:text-[#111111]"
+              style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
+            >
+              {WHATSAPP_DISPLAY_PHONE}
+            </a>
           </div>
 
           {/* Navigation */}
