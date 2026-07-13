@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { InstagramIcon, TikTokIcon } from "./SocialIcons";
+import { INSTAGRAM_URL, TIKTOK_URL } from "@/lib/social";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -31,6 +33,28 @@ export default function SiteHeader() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-4">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="transition-colors hover:text-[#111111]"
+              style={{ color: "#8A8781" }}
+            >
+              <InstagramIcon className="w-[18px] h-[18px]" />
+            </a>
+            <a
+              href={TIKTOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="transition-colors hover:text-[#111111]"
+              style={{ color: "#8A8781" }}
+            >
+              <TikTokIcon className="w-[18px] h-[18px]" />
+            </a>
+          </div>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -89,6 +113,26 @@ export default function SiteHeader() {
                 {link.label}
               </Link>
             ))}
+            <div className="flex items-center gap-5 pt-1">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                style={{ color: "#8A8781" }}
+              >
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                style={{ color: "#8A8781" }}
+              >
+                <TikTokIcon className="w-5 h-5" />
+              </a>
+            </div>
           </nav>
         </div>
       )}

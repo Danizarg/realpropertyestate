@@ -2,6 +2,7 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import ContactForm from "@/components/forms/ContactForm";
 import { WHATSAPP_DISPLAY_PHONE, WHATSAPP_GENERAL_URL } from "@/lib/whatsapp";
+import { INSTAGRAM_URL, TIKTOK_URL } from "@/lib/social";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -93,7 +94,7 @@ export default function ContactPage() {
                   </p>
                   <div className="flex gap-4">
                     <a
-                      href="https://instagram.com"
+                      href={INSTAGRAM_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[14px] transition-colors hover:text-[#111111]"
@@ -102,7 +103,7 @@ export default function ContactPage() {
                       Instagram
                     </a>
                     <a
-                      href="https://tiktok.com"
+                      href={TIKTOK_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[14px] transition-colors hover:text-[#111111]"

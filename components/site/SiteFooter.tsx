@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { WHATSAPP_DISPLAY_PHONE, WHATSAPP_GENERAL_URL } from "@/lib/whatsapp";
+import { INSTAGRAM_URL, TIKTOK_URL } from "@/lib/social";
 
 export default function SiteFooter() {
   return (
@@ -72,7 +73,7 @@ export default function SiteFooter() {
             </p>
             <div className="flex flex-col gap-3">
               <a
-                href="https://instagram.com"
+                href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[13px] transition-colors hover:text-[#111111]"
@@ -81,7 +82,7 @@ export default function SiteFooter() {
                 Instagram
               </a>
               <a
-                href="https://tiktok.com"
+                href={TIKTOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[13px] transition-colors hover:text-[#111111]"
