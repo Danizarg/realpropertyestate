@@ -89,7 +89,7 @@ npm start
 
 After deploying to Vercel:
 
-1. In Vercel → Project Settings → Domains, add your custom domain (e.g. `realpropertyestate.com`).
+1. In Vercel → Project Settings → Domains, add your custom domain (currently `realpropertyestate.online`).
 2. Vercel will give you DNS records to add.
 3. In GoDaddy → DNS Management for your domain:
    - Add an **A record**: `@` → Vercel's IP (shown in Vercel dashboard, typically `76.76.21.21`)

@@ -58,11 +58,11 @@ export default function ContactPage() {
                     Email
                   </p>
                   <a
-                    href="mailto:info@realpropertyestate.com"
+                    href="mailto:info@realpropertyestate.online"
                     className="text-[14px] transition-colors hover:text-[#111111]"
                     style={{ color: "#8A8781", fontFamily: "Inter, system-ui, sans-serif" }}
                   >
-                    info@realpropertyestate.com
+                    info@realpropertyestate.online
                   </a>
                 </div>
 
