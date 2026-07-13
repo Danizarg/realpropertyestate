@@ -178,13 +178,13 @@ export default async function HomePage() {
                 </Link>
               </div>
               <div className="md:col-span-5">
-                <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
-                  <Image
-                    src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=85"
-                    alt="Luxury interior"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover"
+                <div className="relative overflow-hidden mx-auto" style={{ aspectRatio: "9/16", maxWidth: 360 }}>
+                  <iframe
+                    src="https://www.youtube.com/embed/81kdLfUUg1o"
+                    title="Real Property Estate"
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
                   />
                 </div>
               </div>
